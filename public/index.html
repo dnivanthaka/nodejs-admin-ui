@@ -26,6 +26,9 @@
 
     <!-- Custom Fonts -->
     <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
+    <!-- Toggle buttons -->
+    <link href="assets/css/togglebuttons.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -320,7 +323,7 @@
                     <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Indoor Temperature Sensor
+                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO Output Control
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -343,9 +346,52 @@
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <div id=""></div>
+                            <!--<div id="">
+                            </div>-->
                         </div>
                         <!-- /.panel-body -->
+                        <!-- Table -->
+                        <table class="table table-bordered">
+                        <tr>
+                            <th>No.</th>
+                            <th>GPIO Pin</th>
+                            <th>State</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>4</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>17</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>27</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        </table>
+                        <!-- / Table -->
                     </div>
                     <!-- /.panel -->
                     </div>
