@@ -12,9 +12,11 @@ app.get('/', function(req, res){
 
 app.get('/gpio', function(req, res){
     //res.send('It works!!!');
-    gpio.GPIO.init();
-    gpio.GPIO.export(2);
-    console.log(gpio.GPIO.OUT);
+    gpio.init();
+    gpio.export(17);
+    gpio.dir(17, gpio.OUT);
+    gpio.set(17, 1);
+    //console.log(gpio.GPIO.OUT);
     
     res.end();
 });

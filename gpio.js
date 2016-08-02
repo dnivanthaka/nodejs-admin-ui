@@ -16,7 +16,7 @@ var fs = require('fs');
 var exports = module.exports = {};
 
 
-exports.GPIO = {
+var GPIO = {
     OUT: 'out',
     IN: 'in', 
     HI: 1,
@@ -26,16 +26,17 @@ exports.GPIO = {
         //TODO Read the states of GPIO pins here
         var files = fs.readdirSync(sysfs_gpio);
         for(var i=0;i<files.length;i++){
-            if(files[i] === 'export' || files[i] === 'unexport'){
+            if(files[i] === 'export' || files[i] === 'unexport' || files[i].match(/gpiochip/g)){
                 continue;
             }
             
             var dir = fs.readFileSync(sysfs_gpio + '/' + files[i] + '/direction');
             
-            exported_gpio.push([files[i], dir]);
+            exported_gpio.push([files[i].substring(4), String(dir).substring(0, dir.length - 1)]);
         }
-        
-        console.log(exported_gpio[0][0] + " - " + exported_gpio[1][0]);
+        if(exported_gpio.length > 0){ 
+            console.log("Exported "+exported_gpio[0][0]+" - "+exported_gpio[0][1]);
+        }
         /*for(var i=0;i<valid_gpio.length;i++){
             var pin = valid_gpio[i];
             if(fs.accessSync(sysfs_gpio + '/' + 'gpio' + pin.toString() + '/direction')){
@@ -50,6 +51,11 @@ exports.GPIO = {
         }
         
         //TODO check if its already exported
+        if(this.is_exported(pin)){
+            console.log('Already exported');
+            return;
+        }
+
         var fp = fs.openSync(sysfs_gpio + '/' + 'export', 'w');
         fs.writeSync(fp, pin.toString());
         fs.closeSync(fp);
@@ -60,17 +66,28 @@ exports.GPIO = {
             return -1;
         }
         
-        //TODO check if its already exported
         var fp = fs.openSync(sysfs_gpio + '/' + 'unexport', 'w');
         fs.writeSync(fp, pin.toString());
         fs.closeSync(fp);
     },
 
     dir: function(pin, dir){
+        var cur_dir;
+
         if(!this.valid_gpio(pin)){
             return -1;
         }
-        //TODO check if its already in the same direction
+        
+        if((cur_dir = this.is_exported(pin))){
+            if(cur_dir !== dir){
+                console.log('Direction mismatch');
+                return -1;
+            }else{
+                console.log('Already in correct direction');
+                return;
+            }
+        }
+
         var fp = fs.openSync(sysfs_gpio + '/' + 'gpio' + pin.toString() + '/direction', 'w');
         fs.writeSync(fp, dir);
         fs.closeSync(fp);
@@ -107,7 +124,18 @@ exports.GPIO = {
         }
         
         return true;
+    },
+    is_exported: function(pin){
+        var ret = false;
+
+        for(var i=0;i<exported_gpio.length;i++){
+            if(exported_gpio[i][0] === pin.toString()){
+                ret = exported_gpio[i][1];
+            }
+        }
+
+        return ret;
     }
 }
 
-
+module.exports = GPIO;
