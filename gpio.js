@@ -35,7 +35,7 @@ var GPIO = {
             exported_gpio.push([files[i].substring(4), String(dir).substring(0, dir.length - 1)]);
         }
         if(exported_gpio.length > 0){ 
-            console.log("Exported "+exported_gpio[0][0]+" - "+exported_gpio[0][1]);
+            //console.log("Exported "+exported_gpio[0][0]+" - "+exported_gpio[0][1]);
         }
         /*for(var i=0;i<valid_gpio.length;i++){
             var pin = valid_gpio[i];
