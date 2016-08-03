@@ -5,7 +5,7 @@
 */
 var sysfs_gpio = '/sys/class/gpio';
 
-//Raspberry pi valid GPIO numbers
+//Raspberry Pi valid GPIO numbers
 var valid_gpio = [2, 3, 4, 17, 27, 22, 10, 9, 11, 5, 6, 
                   13, 19, 26, 21, 20, 16, 12, 7, 8, 25, 
                   24, 23, 18, 15, 14];
@@ -22,8 +22,7 @@ var GPIO = {
     HI: 1,
     LO: 0,
 
-    init:  function(){
-        //TODO Read the states of GPIO pins here
+    init: function(){
         var files = fs.readdirSync(sysfs_gpio);
         for(var i=0;i<files.length;i++){
             if(files[i] === 'export' || files[i] === 'unexport' || files[i].match(/gpiochip/g)){
@@ -34,9 +33,9 @@ var GPIO = {
             
             exported_gpio.push([files[i].substring(4), String(dir).substring(0, dir.length - 1)]);
         }
-        if(exported_gpio.length > 0){ 
+        //if(exported_gpio.length > 0){ 
             //console.log("Exported "+exported_gpio[0][0]+" - "+exported_gpio[0][1]);
-        }
+        //}
         /*for(var i=0;i<valid_gpio.length;i++){
             var pin = valid_gpio[i];
             if(fs.accessSync(sysfs_gpio + '/' + 'gpio' + pin.toString() + '/direction')){
@@ -44,21 +43,23 @@ var GPIO = {
             }
         }*/
     },
-
+    //This is called from dir method
     export: function(pin){
         if(!this.valid_gpio(pin)){
             return -1;
         }
         
-        //TODO check if its already exported
+
         if(this.is_exported(pin)){
             console.log('Already exported');
-            return;
+            return 0;
         }
 
         var fp = fs.openSync(sysfs_gpio + '/' + 'export', 'w');
         fs.writeSync(fp, pin.toString());
         fs.closeSync(fp);
+        
+        return 0;
     },
     
     unexport: function(pin){
@@ -66,9 +67,17 @@ var GPIO = {
             return -1;
         }
         
+        if(!this.is_exported(pin)){
+            console.log('Not exported');
+            return -1;
+        }
+        
         var fp = fs.openSync(sysfs_gpio + '/' + 'unexport', 'w');
         fs.writeSync(fp, pin.toString());
         fs.closeSync(fp);
+        
+        //Removing from exported list
+        delete_exported(pin);
     },
 
     dir: function(pin, dir){
@@ -87,10 +96,18 @@ var GPIO = {
                 return;
             }
         }
+        
+        if(this.export(pin) < 0){
+            throw new Error('Cannot export gpio '+pin.toString());
+            return -1;
+        }
 
         var fp = fs.openSync(sysfs_gpio + '/' + 'gpio' + pin.toString() + '/direction', 'w');
         fs.writeSync(fp, dir);
         fs.closeSync(fp);
+        
+        //Adding into exported list
+        exported_gpio.push([pin.toString(), dir]);
     },
 
     set: function(pin, val){
@@ -135,6 +152,16 @@ var GPIO = {
         }
 
         return ret;
+    },
+    get_exported: function(){
+        return exported_gpio;
+    },
+    delete_exported: function(pin){
+        for(var i=0;i<exported_gpio.length;i++){
+            if(exported_gpio[i][0] === pin.toString()){
+                exported_gpio.splice(i, 1);
+            }
+        }
     }
 }
 
