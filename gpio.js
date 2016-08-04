@@ -42,6 +42,7 @@ var GPIO = {
                 
             }
         }*/
+        
     },
     //This is called from dir method
     export: function(pin){
@@ -162,6 +163,9 @@ var GPIO = {
                 exported_gpio.splice(i, 1);
             }
         }
+    },
+    get_gpiolist: function(){
+        return valid_gpio.sort(function(a, b){return a-b});
     }
 }
 

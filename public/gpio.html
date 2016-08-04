@@ -36,12 +36,9 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <!-- Angular JS -->
-    <script src="bower_components/angular/angular.min.js"></script>
 </head>
 
 <body>
-
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -92,7 +89,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+                    <h1 class="page-header">GPIO Control</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -123,10 +120,17 @@
                             </div>
                         </div>
                         <!-- /.panel-heading -->
-                        <div class="panel-body">
+                        <!--<div class="panel-body">
                             <div id="morris-area-chart"></div>
-                        </div>
+                        </div>-->
                         <!-- /.panel-body -->
+                        <table class="table table-bordered" id="gpio_list">
+                        <tr>
+                            <th>No.</th>
+                            <th>GPIO Pin</th>
+                            <th>State</th>
+                        </tr>
+                        </table>
                     </div>
                     <!-- /.panel -->
                     </div>
@@ -160,6 +164,7 @@
                             
                         </div>-->
                         <!-- /.panel-body -->
+                        
                         <!-- Table -->
                         <table class="table table-bordered">
                         <tr>
@@ -219,7 +224,77 @@
                     <!-- /.row -->
                     <div class="row">
                     <div class="col-lg-6">  
-                                     
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO Control
+                            <div class="pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">Action</a>
+                                        </li>
+                                        <li><a href="#">Another action</a>
+                                        </li>
+                                        <li><a href="#">Something else here</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Separated link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <!--<div class="panel-body">
+
+                        </div>-->
+                        <!-- /.panel-body -->
+                        <table class="table table-bordered">
+                        <tr>
+                            <th>No.</th>
+                            <th>GPIO Pin</th>
+                            <th>State</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>4</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox" class="gpio_toggle">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>17</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>27</td>
+                            <td>
+                                <!-- Rounded switch -->
+                                <label class="switch">
+                                  <input type="checkbox">
+                                  <div class="slider round"></div>
+                                </label>
+                            </td>
+                        </tr>
+                        </table>
+                        <!-- / Table -->
+                    </div>
+                    <!-- /.panel -->                  
                     </div>
                     <!-- /.col-lg-6 -->
                     <div class="col-lg-6">
@@ -253,6 +328,12 @@
                     $.get('gpio/17/1');
                 }else{
                     $.get('gpio/17/0');
+                }
+            });
+            $.getJSON('gpio/list', function(data){
+                //alert(data);
+                for(var i=0;i<data.length;i++){
+                    $('#gpio_list').append('<tr><td>'+(i + 1)+'</td><td>'+data[i]+'</td><td><button type="button" class="btn btn-sm btn-primary">Export</button></td>');
                 }
             });
         });

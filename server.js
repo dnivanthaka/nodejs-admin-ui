@@ -13,7 +13,13 @@ app.get('/', function(req, res){
 //Init GPIO
 gpio.init();
 
-app.get('/gpio', function(req, res){
+app.get('/gpio/list', function(req, res){
+    var list = JSON.stringify(gpio.get_gpiolist());
+    
+    res.end(list);
+});
+
+app.get('/gpio/exported', function(req, res){
     //res.send('It works!!!');
     //gpio.export(17);
     console.log(JSON.stringify(gpio.get_exported()));
@@ -24,6 +30,7 @@ app.get('/gpio', function(req, res){
     
     res.end(JSON.stringify(gpio.get_exported()));
 });
+
 app.get('/gpio/:id', function(req, res){
     var pin = Number(req.params.id);
     //gpio.export(17);
@@ -35,6 +42,7 @@ app.get('/gpio/:id', function(req, res){
     
     res.end(JSON.stringify(gpio.get_exported()));
 });
+
 app.get('/gpio/:id/:value', function(req, res){
     var pin = Number(req.params.id);
     var val = Number(req.params.value);
