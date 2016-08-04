@@ -42,6 +42,8 @@ var GPIO = {
                 
             }
         }*/
+        //Sorting the array
+        exported_gpio.sort(function(a, b){return a[0]-b[0]})
         
     },
     //This is called from dir method
@@ -78,7 +80,7 @@ var GPIO = {
         fs.closeSync(fp);
         
         //Removing from exported list
-        delete_exported(pin);
+        this.delete_exported(pin);
     },
 
     dir: function(pin, dir){
@@ -90,8 +92,9 @@ var GPIO = {
         
         if((cur_dir = this.is_exported(pin))){
             if(cur_dir !== dir){
-                console.log('Direction mismatch');
-                return -1;
+                console.log('Direction mismatch: changing direction');
+                //return -1;
+                this.unexport(pin);
             }else{
                 console.log('Already in correct direction');
                 return;
@@ -109,6 +112,8 @@ var GPIO = {
         
         //Adding into exported list
         exported_gpio.push([pin.toString(), dir]);
+        //Sorting the array
+        exported_gpio.sort(function(a, b){return a[0]-b[0]})
     },
 
     set: function(pin, val){

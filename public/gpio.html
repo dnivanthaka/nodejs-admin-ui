@@ -138,7 +138,7 @@
                     <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO Management (Exported)
+                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO Output Control
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -166,53 +166,11 @@
                         <!-- /.panel-body -->
                         
                         <!-- Table -->
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="gpio_output_list">
                         <tr>
                             <th>No.</th>
                             <th>GPIO Pin</th>
                             <th>State</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" name="state1" value="1" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" name="state1" value="2" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>17</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>27</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
                         </tr>
                         </table>
                         <!-- / Table -->
@@ -321,6 +279,9 @@
     <!-- Custom Theme JavaScript -->
     <script src="bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
     <script type="text/javascript">
+	var gpio_list = [];
+	var exported_list = [];
+
         $(document).ready(function(){
             $('.gpio_toggle').on('click', function(){
                 //alert($(this).prop('checked'));
@@ -330,12 +291,54 @@
                     $.get('gpio/17/0');
                 }
             });
+            $(document).on('change', '.gpio_status_toggle', function(){
+                //alert($(this).val());
+		//alert($(this).attr('data-pin'));
+		var mode = $(this).val();
+		var pin  = $(this).attr('data-pin');
+
+		//if(mode == 'input'){
+			//$.get('gpio/export/'+pin+'/'+mode);
+		//}else{
+			$.get('gpio/export/'+pin+'/'+mode);
+		//}
+		//For testing
+		//$.get('gpio/set/'+pin+'/1');
+                
+            });
+
             $.getJSON('gpio/list', function(data){
                 //alert(data);
+		gpio_list = data;
                 for(var i=0;i<data.length;i++){
-                    $('#gpio_list').append('<tr><td>'+(i + 1)+'</td><td>'+data[i]+'</td><td><button type="button" class="btn btn-sm btn-primary">Export</button></td>');
+                    $('#gpio_list').append('<tr><td>'+(i + 1)+'</td><td>'+data[i]+'</td><td><div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label=""><label id="label2" class="btn btn-primary"><input type="radio" class="gpio_status_toggle" id="gpio_'+data[i]+'_input" name="gpio'+(i+1)+'" value="input" data-pin="'+data[i]+'" autocomplete="off">Input</input></label><label id="label2" class="btn btn-primary"><input type="radio" class="gpio_status_toggle" id="gpio_'+data[i]+'_output" name="gpio'+(i+1)+'" value="output" data-pin="'+data[i]+'" autocomplete="off">Output</input></label></div></td>');
                 }
+
+		$.getJSON('gpio/exported', function(data){
+                	//alert(data);
+			var cntIn = 1;
+			var cntOut = 1;
+			exported_list = data;
+                	//Toggle already exported pins
+			for(var i=0;i<data.length;i++){
+				if(data[i][1] == 'in'){			
+					$('#gpio_'+data[i][0]+'_input').prop('checked', true);
+					$('#gpio_'+data[i][0]+'_input').closest('label').toggleClass('active');
+					cntIn++;
+				}else{
+					$('#gpio_'+data[i][0]+'_output').prop('checked', true);
+					$('#gpio_'+data[i][0]+'_output').closest('label').toggleClass('active');
+
+					$('#gpio_output_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td><label class="switch"><input type="checkbox" class="gpio_toggle"><div class="slider round"></div></label></td>');
+					cntOut++;
+
+					//Set toggle button state here
+				}
+			}
+            	});
             });
+
+	    
         });
     </script>
 
