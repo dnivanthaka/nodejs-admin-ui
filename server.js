@@ -68,16 +68,17 @@ app.get('/gpio/set/:id/:value', function(req, res){
     res.end(JSON.stringify(gpio.get_exported()));
 });
 
-app.get('/gpio/:id', function(req, res){
+app.get('/gpio/get/:id', function(req, res){
     var pin = Number(req.params.id);
+    var val = 0;
     //gpio.export(17);
-    console.log(JSON.stringify(gpio.get_exported()));
-    gpio.dir(pin, gpio.OUT);
-    gpio.set(pin, 0);
-    console.log(JSON.stringify(gpio.get_exported()));
+    //console.log(JSON.stringify(gpio.get_exported()));
+    //gpio.dir(pin, gpio.OUT);
+    val = gpio.get(pin);
+    //console.log(JSON.stringify(gpio.get_exported()));
     //console.log(gpio.GPIO.OUT);
     
-    res.end(JSON.stringify(gpio.get_exported()));
+    res.end(JSON.stringify([Number(val)]));
 });
 
 

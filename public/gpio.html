@@ -210,45 +210,12 @@
 
                         </div>-->
                         <!-- /.panel-body -->
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="gpio_input_list">
                         <tr>
                             <th>No.</th>
                             <th>GPIO Pin</th>
                             <th>State</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>
-                                <!-- Rounded switch -->
-                                <label class="switch">
-                                  <input type="checkbox" class="gpio_toggle">
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>17</td>
-                            <td>
-                                <!-- Rounded switch -->
-                                <label class="switch">
-                                  <input type="checkbox">
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>27</td>
-                            <td>
-                                <!-- Rounded switch -->
-                                <label class="switch">
-                                  <input type="checkbox">
-                                  <div class="slider round"></div>
-                                </label>
-                            </td>
-                        </tr>
+                        </tr> 
                         </table>
                         <!-- / Table -->
                     </div>
@@ -291,7 +258,7 @@
                     $.get('gpio/17/0');
                 }
             });
-            $(document).on('change', '.gpio_status_toggle', function(){
+        $(document).on('change', '.gpio_status_toggle', function(){
                 //alert($(this).val());
 		//alert($(this).attr('data-pin'));
 		var mode = $(this).val();
@@ -309,36 +276,44 @@
 
             $.getJSON('gpio/list', function(data){
                 //alert(data);
-		gpio_list = data;
+		        gpio_list = data;
                 for(var i=0;i<data.length;i++){
                     $('#gpio_list').append('<tr><td>'+(i + 1)+'</td><td>'+data[i]+'</td><td><div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label=""><label id="label2" class="btn btn-primary"><input type="radio" class="gpio_status_toggle" id="gpio_'+data[i]+'_input" name="gpio'+(i+1)+'" value="input" data-pin="'+data[i]+'" autocomplete="off">Input</input></label><label id="label2" class="btn btn-primary"><input type="radio" class="gpio_status_toggle" id="gpio_'+data[i]+'_output" name="gpio'+(i+1)+'" value="output" data-pin="'+data[i]+'" autocomplete="off">Output</input></label></div></td>');
                 }
 
-		$.getJSON('gpio/exported', function(data){
-                	//alert(data);
-			var cntIn = 1;
-			var cntOut = 1;
-			exported_list = data;
-                	//Toggle already exported pins
-			for(var i=0;i<data.length;i++){
-				if(data[i][1] == 'in'){			
-					$('#gpio_'+data[i][0]+'_input').prop('checked', true);
-					$('#gpio_'+data[i][0]+'_input').closest('label').toggleClass('active');
-					cntIn++;
-				}else{
-					$('#gpio_'+data[i][0]+'_output').prop('checked', true);
-					$('#gpio_'+data[i][0]+'_output').closest('label').toggleClass('active');
+		        $.getJSON('gpio/exported', function(data){
+                        	//alert(data);
+			        var cntIn = 1;
+			        var cntOut = 1;
+			        exported_list = data;
+			        var pinVal = 0;
+			        
+                    //Toggle already exported pins
+			        for(var i=0;i<data.length;i++){
+			            //Reading pin value
+			            $.getJSON('gpio/get/'+data[i][0], function(val){
+			                pinVal = val[0];
+			            });
+			        
+				        if(data[i][1] == 'in'){			
+					        $('#gpio_'+data[i][0]+'_input').prop('checked', true);
+					        $('#gpio_'+data[i][0]+'_input').closest('label').toggleClass('active');
+					        $('#gpio_input_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td>'+pinval+'</td>');
+					        cntIn++;
+				        }else{
+					        $('#gpio_'+data[i][0]+'_output').prop('checked', true);
+					        $('#gpio_'+data[i][0]+'_output').closest('label').toggleClass('active');
 
-					$('#gpio_output_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td><label class="switch"><input type="checkbox" class="gpio_toggle"><div class="slider round"></div></label></td>');
-					cntOut++;
-
-					//Set toggle button state here
-				}
-			}
-            	});
-            });
-
-	    
+                            if(pinval == 0){
+					            $('#gpio_output_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td><label class="switch"><input type="checkbox" class="gpio_toggle"><div class="slider round"></div></label></td>');
+					        }else{
+					            $('#gpio_output_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td><label class="switch"><input type="checkbox" class="gpio_toggle" checked><div class="slider round"></div></label></td>');
+					        }
+					        cntOut++;
+				        }
+			        }
+                });
+            });    
         });
     </script>
 
