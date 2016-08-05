@@ -134,7 +134,7 @@ var GPIO = {
         }
         
         var fp = fs.openSync(sysfs_gpio + '/' + 'gpio' + pin.toString() + '/value', 'r');
-        val = fs.readSync(fp);
+        val = fs.readFileSync(fp);
         fs.closeSync(fp);
         
         return val;
