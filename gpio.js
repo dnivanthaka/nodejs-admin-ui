@@ -74,6 +74,9 @@ var GPIO = {
             console.log('Not exported');
             return -1;
         }
+
+        //Setting pin value to 0
+        this.set(pin, 0);
         
         var fp = fs.openSync(sysfs_gpio + '/' + 'unexport', 'w');
         fs.writeSync(fp, pin.toString());
