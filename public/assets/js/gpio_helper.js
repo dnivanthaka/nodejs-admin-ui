@@ -1,5 +1,6 @@
 var gpio_list     = [];
 var exported_list = [];
+var prev_exported_list = [];
 var cntIn         = 1;
 var cntOut        = 1;
 
@@ -91,17 +92,34 @@ function toggleGPIOExported(){
 	var elems = $('.gpio_status_toggle');
 	elems.prop('checked', false);
 	$(elems).closest('label').removeClass('active');
+	
+	//alert(arrayHash(data));
 	//$(elems).closest('.gpio_unexport').addClass('disabled');
+	var nVal = arrayHash(data);
+	var oVal = arrayHash(prev_exported_list);
+	
+	if(nVal !== oVal){
+	    $('#gpio_output_list').find('tr:gt(0)').remove();
+        $('#gpio_input_list').find('tr:gt(0)').remove();
+        
+        updateExportedStatus(prev_exported_list);
+        
+        cntIn         = 1;
+        cntOut        = 1;
+        
+        prev_exported_list = data;
+	}
 
         //Toggle already exported pins
         for(var i=0;i<data.length;i++){
+        
 	    //$('#gpio_'+data[i][0]+'_unexport').addClass('disabled');
             
             if(data[i][1] == 'in'){
                 //if(!$('#gpio_'+data[i][0]+'_input').prop('checked')){
                 // If its in output list remove it
                 if($('#gpio_output_list #gpio'+data[i][0]+'State').length > 0){
-		    $('#gpio_'+data[i][0]+'_output').prop('checked', false);
+		            $('#gpio_'+data[i][0]+'_output').prop('checked', false);
                     $('#gpio_'+data[i][0]+'_output').closest('label').removeClass('active');
                     $('#gpio_output_list #gpio'+data[i][0]+'State').closest('tr').remove();
                     
@@ -112,7 +130,7 @@ function toggleGPIOExported(){
                     $('#gpio_'+data[i][0]+'_input').closest('label').addClass('active');		
                     $('#gpio_'+data[i][0]+'_unexport').removeClass('disabled');
 
-		if($('#gpio_input_list #gpio'+data[i][0]+'State').length == 0){
+		        if($('#gpio_input_list #gpio'+data[i][0]+'State').length == 0){
                     $('#gpio_input_list').append('<tr><td>'+cntIn+'</td><td>'+data[i][0]+'</td><td><div id="gpio'+data[i][0]+'State"></div></td></tr>');
                     cntIn++;
                 }
@@ -121,7 +139,7 @@ function toggleGPIOExported(){
                 //alert(!$('#gpio_'+data[i][0]+'_output').prop('checked'));
                 //if(!$('#gpio_'+data[i][0]+'_output').prop('checked')){
                 if($('#gpio_input_list #gpio'+data[i][0]+'State').length > 0){
-		    $('#gpio_'+data[i][0]+'_input').prop('checked', false);		
+		            $('#gpio_'+data[i][0]+'_input').prop('checked', false);		
                     $('#gpio_'+data[i][0]+'_input').closest('label').removeClass('active');
                     $('#gpio_input_list #gpio'+data[i][0]+'State').closest('tr').remove();
                 }
@@ -190,4 +208,23 @@ function getExportedDir(exp, pin){
 	}
 
 	return false;
+}
+
+function arrayHash(lis){
+    var total = 0;
+
+    for(var i=0;i<lis.length;i++){
+        total += Number(lis[i][0]) + Number(lis[i][1].charCodeAt(0)) + Number(lis[i][1].charCodeAt(1));
+        //total += Number(lis[i][0]);
+    }
+    
+    return total;
+}
+
+function updateExportedStatus(lis){
+    for(var i=0;i<lis.length;i++){
+        if($('#gpio_output_list #gpio'+lis[i][0]+'State').length == 0 && $('#gpio_input_list #gpio'+lis[i][0]+'State').length == 0 ){
+                    $('#gpio_'+lis[i][0]+'_unexport').addClass('disabled');
+        }
+    }
 }
