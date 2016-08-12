@@ -1,14 +1,34 @@
 //http://www.w3schools.com/howto/howto_css_switch.asp
+//https://expressjs.com/en/guide/routing.html
 var express = require('express');
 var app = express();
-var gpio = require('./gpio.js');
+var gpio = require('./modules/gpio.js');
 
 //var bootstrap = require('bootstrap');
 
 app.use(express.static('public'));
 app.get('/', function(req, res){
-    res.send('It works!!!');
+    res.end();
+    //res.send('It works!!!');
 });
+
+/*setInterval(function(){
+    //console.log("Timeout");
+}, 2000);*/
+
+
+/*const exec = require('child_process').exec;
+//ls -l | wc -l
+exec('ls -l', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.log(`stderr: ${stderr}`);
+});*/
+
+
 
 //Init GPIO
 gpio.init();

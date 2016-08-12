@@ -101,40 +101,7 @@
                 <div class="col-lg-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO List
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div id="morris-area-chart"></div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                    </div>
-                    <!-- /.col-lg-6 -->
-                    <div class="col-lg-6">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> GPIO Management (Exported)
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Hardware Information
                             <div class="pull-right">
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -157,60 +124,54 @@
                         </div>
                         <!-- /.panel-heading -->
                         <!--<div class="panel-body">
-                            
+                            <div id="morris-area-chart"></div>
                         </div>-->
                         <!-- /.panel-body -->
                         <!-- Table -->
-                        <table class="table table-bordered">
+                        <table class="table table-bordered" id="gpio_list">
                         <tr>
-                            <th>No.</th>
-                            <th>GPIO Pin</th>
-                            <th>State</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
                         </tr>
                         <tr>
-                            <td>1</td>
-                            <td>4</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" name="state1" value="1" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" name="state1" value="2" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>17</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>27</td>
-                            <td>
-                                <div class="btn-group btn-group-xs" data-toggle="buttons" role="group" aria-label="">
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Input</input>
-                                </label>
-                                <label id="label2" class="btn btn-primary">
-                                    <input type="radio" autocomplete="off">Output</input>
-                                </label>
-                                </div>
-                            </td>
+                            <td>Parameter</td>
+                            <td>Value</td>
                         </tr>
                         </table>
-                        <!-- / Table -->
+                        <!-- /Table -->
+                    </div>
+                    <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-6 -->
+                    <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Memory
+                            <!--<div class="pull-right">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                        Actions
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right" role="menu">
+                                        <li><a href="#">Action</a>
+                                        </li>
+                                        <li><a href="#">Another action</a>
+                                        </li>
+                                        <li><a href="#">Something else here</a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">Separated link</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>-->
+                        </div>
+                        <!-- /.panel-heading -->
+                        <!--<div class="panel-body">
+                            
+                        </div>-->
+                        <!-- /.panel-body -->
                     </div>
                     <!-- /.panel -->
                     </div>
@@ -246,16 +207,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="bower_components/startbootstrap-sb-admin-2/dist/js/sb-admin-2.js"></script>
     <script type="text/javascript">
-        $(document).ready(function(){
-            $('.gpio_toggle').on('click', function(){
-                //alert($(this).prop('checked'));
-                if($(this).prop('checked')){
-                    $.get('gpio/17/1');
-                }else{
-                    $.get('gpio/17/0');
-                }
-            });
-        });
+        
     </script>
 
 </body>

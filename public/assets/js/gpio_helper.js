@@ -1,8 +1,8 @@
 var gpio_list     = [];
 var exported_list = [];
 var prev_exported_list = [];
-var cntIn         = 1;
-var cntOut        = 1;
+var cntIn         = 0;
+var cntOut        = 0;
 
 $(document).ready(function(){
     $(document).on('click', '.gpio_toggle', function(){
@@ -104,8 +104,8 @@ function toggleGPIOExported(){
         
         updateExportedStatus(prev_exported_list);
         
-        cntIn         = 1;
-        cntOut        = 1;
+        cntIn         = 0;
+        cntOut        = 0;
         
         prev_exported_list = data;
 	}
@@ -131,8 +131,9 @@ function toggleGPIOExported(){
                     $('#gpio_'+data[i][0]+'_unexport').removeClass('disabled');
 
 		        if($('#gpio_input_list #gpio'+data[i][0]+'State').length == 0){
+		            cntIn++;
                     $('#gpio_input_list').append('<tr><td>'+cntIn+'</td><td>'+data[i][0]+'</td><td><div id="gpio'+data[i][0]+'State"></div></td></tr>');
-                    cntIn++;
+                    
                 }
                 //}
             }else{
@@ -149,11 +150,12 @@ function toggleGPIOExported(){
                     $('#gpio_'+data[i][0]+'_output').closest('label').addClass('active');		
                     $('#gpio_'+data[i][0]+'_unexport').removeClass('disabled');
 
-		if($('#gpio_output_list #gpio'+data[i][0]+'State').length == 0){
+		    if($('#gpio_output_list #gpio'+data[i][0]+'State').length == 0){
+		            cntOut++;
                     //alert($('#gpio_output_list #gpio'+data[i][0]+'State').length);            
                     $('#gpio_output_list').append('<tr><td>'+cntOut+'</td><td>'+data[i][0]+'</td><td><label class="switch"><input type="checkbox" id="gpio'+data[i][0]+'State" data-pin="'+data[i][0]+'" class="gpio_toggle"><div class="slider round"></div></label></td></tr>');
                
-                    cntOut++;
+                    
                 }
                 //}
             }
