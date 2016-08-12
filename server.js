@@ -3,6 +3,7 @@
 var express = require('express');
 var app = express();
 var gpio = require('./modules/gpio.js');
+var piinfo = require('./modules/piinfo.js');
 
 //var bootstrap = require('bootstrap');
 
@@ -28,7 +29,7 @@ exec('ls -l', (error, stdout, stderr) => {
   console.log(`stderr: ${stderr}`);
 });*/
 
-
+piinfo.execute('measure_temp');
 
 //Init GPIO
 gpio.init();
